@@ -67,6 +67,15 @@ interface InputField {
   options?: string[];
 }
 
+// // catatan dari Indra
+// const inputObject = {
+//   nama: {
+//     label: "Nama",
+//     type: "text",
+//     placeholder: "Masukkan nama",
+//   },
+// };
+
 const inputFields: InputField[] = [
   { name: "nama", label: "Nama", type: "text", placeholder: "Masukkan nama" },
   { name: "ttl", label: "Tempat, Tanggal Lahir", type: "date" },
@@ -80,6 +89,7 @@ const inputFields: InputField[] = [
   { name: "kabupaten", label: "Kabupaten", type: "text" },
   { name: "nib", label: "NIB", type: "text" },
   { name: "luas", label: "Luas", type: "number" },
+  { name: "tahun", label: "Tahun", type: "number" },
   { name: "statusTanah", label: "Status Tanah", type: "text" },
   { name: "penggunaan", label: "Penggunaan", type: "text" },
   { name: "batasUtara", label: "Sebelah Utara", type: "text" },
@@ -98,6 +108,10 @@ const inputFields: InputField[] = [
   { name: "alamatSaksi2", label: "Alamat Saksi 2", type: "text" },
   { name: "tanggal", label: "Tanggal Pembuatan", type: "date" },
 ];
+
+// //Catatan dari Indra
+// const labelWithObject = inputObject["nama"]; // O(1)
+// const labelWithArray = inputFields.find((item) => item.name === "nama"); // Worst case O(n), best case O(1)
 
 export default function SuratPernyataan() {
   const {
@@ -124,58 +138,154 @@ export default function SuratPernyataan() {
 
   return (
     <div className="min-h-screen py-4 px-4 sm:px-6 lg:px-8 mx-auto bg-white p-8 rounded-lg shadow-lg">
-      <h1 className="font-base text-center mb-8 text-blue-600 ">
+      <h1 className="font-base text-center mb-8 text-blue-600">
         Generate Surat Pernyataan
       </h1>
-      <form onSubmit={handleSubmit(generateDocx)} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {inputFields.map(({ name, label, type, placeholder, options }) => (
-            <div
-              key={name}
-              className={`${
-                name === "proses" || name === "nama" || name === "alamat"
-                  ? "col-span-full"
-                  : "w-full"
-              }`}
-            >
-              <label className="block text-sm font-medium text-gray-700">
-                {label}:
-              </label>
-              {type === "select" ? (
-                <select
-                  {...register(name, { required: `${label} harus diisi` })}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {options?.map((option) => (
-                    <option key={option} value={option}>
-                      {option || "Pilih Proses"}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  type={type}
-                  placeholder={placeholder}
-                  {...register(name, {
-                    required:
-                      name !== "rt" &&
-                      name !== "rw" &&
-                      name !== "nib" &&
-                      name !== "jalan"
-                        ? `${label} harus diisi`
-                        : false,
-                  })}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              )}
-              {errors[name] && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors[name]?.message}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+      <form onSubmit={handleSubmit(generateDocx)} className="space-y-8">
+        <fieldset className="border border-gray-300 rounded-lg p-4">
+          <legend className="text-sm font-semibold text-gray-700 px-2">
+            Data Pribadi
+          </legend>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {["nama", "ttl", "noKtp", "alamat"].map((field) => {
+              const input = inputFields.find((i) => i.name === field);
+              return (
+                input && (
+                  <div key={input.name} className="w-full">
+                    <label className="block text-sm font-medium text-gray-700">
+                      {input.label}:
+                    </label>
+                    <input
+                      type={input.type}
+                      placeholder={input.placeholder}
+                      {...register(input.name, {
+                        required: `${input.label} harus diisi`,
+                      })}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    {errors[input.name] && (
+                      <p className="text-sm text-red-500 mt-1">
+                        {errors[input.name]?.message}
+                      </p>
+                    )}
+                  </div>
+                )
+              );
+            })}
+          </div>
+        </fieldset>
+
+        <fieldset className="border border-gray-300 rounded-lg p-4">
+          <legend className="text-sm font-semibold text-gray-700 px-2">
+            Informasi Tanah
+          </legend>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              "jalan",
+              "rt",
+              "rw",
+              "desa",
+              "kecamatan",
+              "kabupaten",
+              "nib",
+              "luas",
+              "statusTanah",
+              "penggunaan",
+            ].map((field) => {
+              const input = inputFields.find((i) => i.name === field);
+              return (
+                input && (
+                  <div key={input.name} className="w-full">
+                    <label className="block text-sm font-medium text-gray-700">
+                      {input.label}:
+                    </label>
+                    <input
+                      type={input.type}
+                      placeholder={input.placeholder}
+                      {...register(input.name)}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                )
+              );
+            })}
+          </div>
+        </fieldset>
+
+        <fieldset className="border border-gray-300 rounded-lg p-4">
+          <legend className="text-sm font-semibold text-gray-700 px-2">
+            Batas Tanah
+          </legend>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {["batasUtara", "batasTimur", "batasSelatan", "batasBarat"].map(
+              (field) => {
+                const input = inputFields.find((i) => i.name === field);
+                return (
+                  input && (
+                    <div key={input.name} className="w-full">
+                      <label className="block text-sm font-medium text-gray-700">
+                        {input.label}:
+                      </label>
+                      <input
+                        type={input.type}
+                        placeholder={input.placeholder}
+                        {...register(input.name)}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  )
+                );
+              }
+            )}
+          </div>
+        </fieldset>
+
+        <fieldset className="border border-gray-300 rounded-lg p-4">
+          <legend className="text-sm font-semibold text-gray-700 px-2">
+            Proses dan Saksi
+          </legend>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              "tahun",
+              "proses",
+              "saksi1",
+              "alamatSaksi1",
+              "saksi2",
+              "alamatSaksi2",
+              "tanggal",
+            ].map((field) => {
+              const input = inputFields.find((i) => i.name === field);
+              return (
+                input && (
+                  <div key={input.name} className="w-full">
+                    <label className="block text-sm font-medium text-gray-700">
+                      {input.label}:
+                    </label>
+                    {input.type === "select" ? (
+                      <select
+                        {...register(input.name)}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        {input.options?.map((option) => (
+                          <option key={option} value={option}>
+                            {option || "Pilih Proses"}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type={input.type}
+                        placeholder={input.placeholder}
+                        {...register(input.name)}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    )}
+                  </div>
+                )
+              );
+            })}
+          </div>
+        </fieldset>
 
         <button
           type="submit"
