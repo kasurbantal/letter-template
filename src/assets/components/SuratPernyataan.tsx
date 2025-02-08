@@ -3,7 +3,6 @@ import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { saveAs } from "file-saver";
 
-// Tipe data untuk defaultValues
 interface FormData {
   nama: string;
   ttl: string;
@@ -32,7 +31,6 @@ interface FormData {
   tanggal: string;
 }
 
-// Nilai default untuk form
 const defaultValues: FormData = {
   nama: "",
   ttl: "",
@@ -61,7 +59,6 @@ const defaultValues: FormData = {
   tanggal: "",
 };
 
-// Tipe data untuk inputFields
 interface InputField {
   name: keyof FormData;
   label: string;
@@ -70,7 +67,6 @@ interface InputField {
   options?: string[];
 }
 
-// Daftar field input
 const inputFields: InputField[] = [
   { name: "nama", label: "Nama", type: "text", placeholder: "Masukkan nama" },
   { name: "ttl", label: "Tempat, Tanggal Lahir", type: "date" },
@@ -128,45 +124,62 @@ export default function SuratPernyataan() {
 
   return (
     <div className="min-h-screen py-4 px-4 sm:px-6 lg:px-8 mx-auto bg-white p-8 rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold text-center mb-8 text-blue-600">
+      <h1 className="font-base text-center mb-8 text-blue-600 ">
         Generate Surat Pernyataan
       </h1>
-      <form onSubmit={handleSubmit(generateDocx)} className="space-y-6">
-        {inputFields.map(({ name, label, type, placeholder, options }) => (
-          <div key={name}>
-            <label className="block text-sm font-medium text-gray-700">
-              {label}:
-            </label>
-            {type === "select" ? (
-              <select
-                {...register(name, { required: `${label} harus diisi` })}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {options?.map((option) => (
-                  <option key={option} value={option}>
-                    {option || "Pilih Proses"}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                type={type}
-                placeholder={placeholder}
-                {...register(name, { required: `${label} harus diisi` })}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            )}
-            {errors[name] && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors[name]?.message}
-              </p>
-            )}
-          </div>
-        ))}
+      <form onSubmit={handleSubmit(generateDocx)} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {inputFields.map(({ name, label, type, placeholder, options }) => (
+            <div
+              key={name}
+              className={`${
+                name === "proses" || name === "nama" || name === "alamat"
+                  ? "col-span-full"
+                  : "w-full"
+              }`}
+            >
+              <label className="block text-sm font-medium text-gray-700">
+                {label}:
+              </label>
+              {type === "select" ? (
+                <select
+                  {...register(name, { required: `${label} harus diisi` })}
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {options?.map((option) => (
+                    <option key={option} value={option}>
+                      {option || "Pilih Proses"}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type={type}
+                  placeholder={placeholder}
+                  {...register(name, {
+                    required:
+                      name !== "rt" &&
+                      name !== "rw" &&
+                      name !== "nib" &&
+                      name !== "jalan"
+                        ? `${label} harus diisi`
+                        : false,
+                  })}
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              )}
+              {errors[name] && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors[name]?.message}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          className="w-full text-blue-600 py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
         >
           Generate Docx
         </button>
