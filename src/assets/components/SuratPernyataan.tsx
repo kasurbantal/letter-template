@@ -1,7 +1,5 @@
 import { useForm } from "react-hook-form";
-import PizZip from "pizzip";
-import Docxtemplater from "docxtemplater";
-import { saveAs } from "file-saver";
+import { generateDocx } from "../../helper";
 
 interface FormData {
   nama: string;
@@ -38,13 +36,13 @@ const defaultValues: FormData = {
   ttl: "",
   noKtp: "",
   alamat: "",
-  jalan: "",
-  rt: "",
-  rw: "",
+  jalan: "-",
+  rt: "-",
+  rw: "-",
   desa: "",
   kecamatan: "",
   kabupaten: "",
-  nib: "",
+  nib: "-",
   luas: 0,
   statusTanah: "",
   penggunaan: "",
@@ -104,17 +102,11 @@ export default function SuratPernyataan() {
     formState: { errors },
   } = useForm<FormData>({ defaultValues });
 
-  const generateDocx = async (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     try {
-      const response = await fetch("/SuratPernyataan.docx");
-      const arrayBuffer = await response.arrayBuffer();
-      const zip = new PizZip(arrayBuffer);
-      const doc = new Docxtemplater(zip);
-      doc.render(data);
-      const output = doc.getZip().generate({ type: "blob" });
-      saveAs(output, "Surat-Pernyataan.docx");
+      await generateDocx(data, "/SuratPernyataan.docx");
     } catch (error) {
-      console.error("Error generating document:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -134,11 +126,11 @@ export default function SuratPernyataan() {
       </div>
 
       {/* Form Section */}
-      <div className="flex-1 p-8 bg-white  rounded-lg shadow-md">
-        <h1 className="text-2xl font-semibold text-center mb-8">
+      <div className="flex-1 p-8 bg-white rounded-lg shadow-md">
+        <h1 className="font-semibold text-center mb-8">
           Surat Pernyataan Penguasaan Fisik Tanah
         </h1>
-        <form onSubmit={handleSubmit(generateDocx)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
             {Object.entries(inputObject).map(([name, field]) => (
               <div
@@ -172,13 +164,7 @@ export default function SuratPernyataan() {
                   <input
                     type={field.type}
                     {...register(name as keyof FormData, {
-                      required:
-                        name !== "rt" &&
-                        name !== "rw" &&
-                        name !== "nib" &&
-                        name !== "jalan"
-                          ? `${field.label} harus diisi`
-                          : false,
+                      required: `${field.label} harus diisi`,
                     })}
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
