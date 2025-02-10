@@ -1,6 +1,5 @@
 import "./App.css";
-import SuratPernyataan from "./assets/components/SuratPernyataan";
-SuratPernyataan;
+import SuratPernyataan from "./page/SuratPernyataan";
 
 function App() {
   return (

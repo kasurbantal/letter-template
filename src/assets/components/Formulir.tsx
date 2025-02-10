@@ -95,7 +95,7 @@ const inputObject: Record<
   tanggal: { label: "Tanggal Pembuatan", type: "date" },
 };
 
-export default function SuratPernyataan() {
+export const Formulir = () => {
   const {
     register,
     handleSubmit,
@@ -111,21 +111,7 @@ export default function SuratPernyataan() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg p-6">
-        <h2 className="text-xl font-bold mb-4">Surat Pernyataan</h2>
-        <ul className="space-y-2">
-          <li className="text-gray-400 font-medium cursor-pointer">
-            Surat Pernyataan
-          </li>
-          <li className="text-gray-400 font-medium cursor-pointer">
-            Surat Pernyataan Lainnya
-          </li>
-        </ul>
-      </div>
-
-      {/* Form Section */}
+    <>
       <div className="flex-1 p-8 bg-white rounded-lg shadow-md">
         <h1 className="font-semibold text-center mb-8">
           Surat Pernyataan Penguasaan Fisik Tanah
@@ -185,6 +171,6 @@ export default function SuratPernyataan() {
           </button>
         </form>
       </div>
-    </div>
+    </>
   );
-}
+};
