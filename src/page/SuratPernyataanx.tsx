@@ -1,5 +1,5 @@
-import { Formulir } from "./Formulir";
-import { SideBar } from "./SideBar";
+import { Formulir } from "../assets/components/Formulir";
+import { SideBar } from "../assets/components/SideBar";
 
 export default function SuratPernyataan() {
   return (

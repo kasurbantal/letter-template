@@ -32,7 +32,7 @@ const FormulirCustom1 = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     reset,
     formState: { errors },
   } = useForm<FormData>({ defaultValues });
@@ -62,10 +62,11 @@ const FormulirCustom1 = () => {
   );
 
   return (
-    <div className="flex-1 p-8 bg-white rounded-lg shadow-md">
-      <h1 className="font-semibold text-center mb-8">Formulir Surat</h1>
-      <div className="mb-4">
-        <h2 className="mb-2 text-lg font-medium">Pilih Jenis Surat:</h2>
+    <div className="px-8 py-6 items-center">
+      <div className="px-4 py-4 bg-white rounded-lg flex flex-col w-1/2 border-2 border-gray-200">
+        <h2 className="mb-2 text-lg font-bold text-md text-orange-400">
+          Dok Lahan:
+        </h2>
         <div className="space-x-4">
           {Object.keys(suratFields).map((surat) => (
             <label key={surat} className="inline-flex items-center space-x-2">

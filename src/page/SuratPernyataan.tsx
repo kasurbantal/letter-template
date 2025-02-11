@@ -1,13 +1,13 @@
-import { SideBar } from "../assets/components/SideBar";
-import { Formulir } from "../assets/components/Formulir";
 import FormulirCustom from "../assets/components/FormulirCustom";
 
 export default function SuratPernyataan() {
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="bg-gray-100 min-w-screen min-h-screen">
       {/* <SideBar /> */}
       {/* <Formulir /> */}
-      <FormulirCustom />
+      <div className="flex-row">
+        <FormulirCustom />
+      </div>
     </div>
   );
 }
