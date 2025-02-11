@@ -4,48 +4,74 @@ import { generateMultipleDocx } from "../../helper1";
 import { MdOutlineAssignment } from "react-icons/md";
 
 interface FormData {
-  nama: string;
-  nama2: string;
-  tempatLahir: string;
-  ttl: string;
-  ttl2: string;
-  noKtp: string;
-  noKtp2: string;
-  alamat: string;
+  namaPembuat: string;
+  tempatLahirPembuat: string;
+  ttlPembuat: Date;
+  noKtpPembuat: string;
+  alamatPembuat: string;
   jalan: string;
   rt: string;
   rw: string;
   desa: string;
   kecamatan: string;
-  kabupaten: string;
+  kota: string;
   provinsi: string;
   nib: string;
-  luas: number;
+  luas: number | string;
   statusTanah: string;
   penggunaan: string;
   batasUtara: string;
   batasTimur: string;
   batasSelatan: string;
   batasBarat: string;
-  tahun: number;
+  tahunDok: number;
   proses: string;
   saksi1: string;
   alamatSaksi1: string;
   saksi2: string;
   alamatSaksi2: string;
-  tanggal: string;
-  ahliWaris: string;
-  tanggalAkta: string;
-  numberPenerbit: string;
-  penerbit: string;
-  buktiKepemilikan: string;
-  namaKuasa: string;
-  ttlKuasa: string;
-  noKtpKuasa: string;
-  alamatKuasa: string;
+  saksi3: string;
+  saksi4: string;
+  tanggalPembuatan: Date;
+  kades: string;
+  nipKades: string;
+  camat: string;
+  nipCamat: string;
+  tandaBatas: string;
+  keadaanTanah: string;
+  penunjukBatas: string;
+  nop: string;
+  persil: string;
+  klas: string;
+  pemilikTanah: string;
+  panjangTanah: number;
+  lebarTanah: number;
+  dusun: string;
+  alamatTanah: string;
   lokasi: string;
-  pemberiKuasa: string;
-  penerimaKuasa: string;
+  namaPejabat: string;
+  jabatan: string;
+  ptSatu: string;
+  ptDua: string;
+  nomorDok: string;
+  tglDok: Date;
+  nameSite: string;
+  siteId: string;
+  namaPemilik: string;
+  alamatPemilik: string;
+  noKTPPemilik: string;
+  noBAK: string;
+  namaRt: string;
+  namaRw: string;
+  pekerjaanPembuat: string;
+  nomorTanah: string;
+  tglTtdPemilik: Date;
+  tglTtdKades: Date;
+  tglTtdCamat: Date;
+  hariPertemuan: string;
+  tanggalPertemuan: string;
+  namaPejabatBPN: string;
+  jabatanPejabatBPN: string;
 }
 
 interface SuratConfig {
@@ -55,20 +81,17 @@ interface SuratConfig {
 }
 
 const defaultValues: FormData = {
-  nama: "",
-  nama2: "",
-  tempatLahir: "",
-  ttl: "",
-  ttl2: "",
-  noKtp: "",
-  noKtp2: "",
-  alamat: "",
+  namaPembuat: "",
+  tempatLahirPembuat: "",
+  ttlPembuat: new Date(),
+  noKtpPembuat: "",
+  alamatPembuat: "",
   jalan: "",
   rt: "",
   rw: "",
   desa: "",
   kecamatan: "",
-  kabupaten: "",
+  kota: "",
   provinsi: "",
   nib: "",
   luas: 0,
@@ -78,73 +101,278 @@ const defaultValues: FormData = {
   batasTimur: "",
   batasSelatan: "",
   batasBarat: "",
-  tahun: 0,
+  tahunDok: 0,
   proses: "",
   saksi1: "",
   alamatSaksi1: "",
   saksi2: "",
   alamatSaksi2: "",
-  tanggal: "",
-  ahliWaris: "",
-  tanggalAkta: "",
-  numberPenerbit: "",
-  penerbit: "",
-  buktiKepemilikan: "",
-  namaKuasa: "",
-  ttlKuasa: "",
-  noKtpKuasa: "",
-  alamatKuasa: "",
+  saksi3: "",
+  saksi4: "",
+  tanggalPembuatan: new Date(),
+  kades: "",
+  nipKades: "",
+  camat: "",
+  nipCamat: "",
+  tandaBatas: "",
+  keadaanTanah: "",
+  penunjukBatas: "",
+  nop: "",
+  persil: "",
+  klas: "",
+  pemilikTanah: "",
+  panjangTanah: 0,
+  lebarTanah: 0,
+  dusun: "",
+  alamatTanah: "",
   lokasi: "",
-  pemberiKuasa: "",
-  penerimaKuasa: "",
+  namaPejabat: "",
+  jabatan: "",
+  ptSatu: "",
+  ptDua: "",
+  nomorDok: "",
+  tglDok: new Date(),
+  nameSite: "",
+  siteId: "",
+  namaPemilik: "",
+  alamatPemilik: "",
+  noKTPPemilik: "",
+  noBAK: "",
+  namaRt: "",
+  namaRw: "",
+  pekerjaanPembuat: "",
+  nomorTanah: "",
+  tglTtdPemilik: new Date(),
+  tglTtdKades: new Date(),
+  tglTtdCamat: new Date(),
+  hariPertemuan: "",
+  tanggalPertemuan: "",
+  namaPejabatBPN: "",
+  jabatanPejabatBPN: "",
 };
 
 const suratSitacs = {
-  suratM: {
-    label: "Surat Persetujuan Warga dalam Radius Tower-Rev.4.2-NEW L1",
-    fields: ["nama", "tempatLahir", "ttl"],
-    templatePath: "/SuratPernyataan.docx",
+  suketBPNSuratPernyataanTanahBelumBersertipikatStandardTBIG: {
+    label: "SuketBPN-SuratPernyataanTanahBelumBersertipikat-StandardTBIG",
+    fields: [
+      "tanggalPembuatan",
+      "namaPejabat",
+      "jabatan",
+      "ptSatu",
+      "ptDua",
+      "nomorDok",
+      "tglDok",
+      "nameSite",
+      "siteId",
+      "alamatTanah",
+      "batasUtara",
+      "batasTimur",
+      "batasSelatan",
+      "batasBarat",
+      "persil",
+      "namaPemilik",
+      "namaPejabatBPN",
+      "jabatanPejabatBPN",
+      "hariPertemuan",
+      "tanggalPertemuan",
+    ],
+    templatePath:
+      "/doc-lahan/SuketBPN-SuratPernyataanTanahBelumBersertipikat-StandardTBIG.docx",
   },
-  suratN: {
-    label: "Sketsa Batas Lahan dan Persetujuan Akses Jalan-Rev.4.3-NEW L1",
-    fields: ["nama", "alamat", "desa", "nib"],
-    templatePath: "/SuratPernyataan1.docx",
+  suratKeteranganBebasBanjir: {
+    label: "SuratKeteranganBebasBanjir",
+    fields: [
+      "namaPemilik",
+      "alamatPemilik",
+      "noKTPPemilik",
+      "noBAK",
+      "tanggalPembuatan",
+      "namaRt",
+      "namaRw",
+    ],
+    templatePath: "/doc-lahan/SuratKeteranganBebasBanjir.docx",
   },
-  suratO: {
-    label: "3. Berita Acara Negosiasi (BAN)-Rev.6.3",
-    fields: ["nama", "alamat", "desa", "nib"],
-    templatePath: "/SuratPernyataan1.docx",
+  suratKeteranganKepemilikanTanah: {
+    label: "SuratKeteranganKepemilikanTanah",
+    fields: [
+      "desa",
+      "kecamatan",
+      "kota",
+      "provinsi",
+      "penggunaan",
+      "nop",
+      "persil",
+      "klas",
+      "pemilikTanah",
+      "panjangTanah",
+      "lebarTanah",
+      "namaPembuat",
+      "dusun",
+      "batasUtara",
+      "batasTimur",
+      "batasSelatan",
+      "batasBarat",
+      "alamatTanah",
+      "saksi1",
+      "saksi2",
+      "saksi3",
+      "saksi4",
+      "tanggalPembuatan",
+      "kades",
+      "nipKades",
+      "camat",
+      "nipCamat",
+    ],
+    templatePath: "/doc-lahan/SuratKeteranganKepemilikanTanah.docx",
   },
-  suratP: {
-    label: "2. Berita Acara Kesepakatan (BAK) - 11 Tahun-Rev.5.2",
-    fields: ["nama", "alamat", "desa", "nib"],
-    templatePath: "/SuratPernyataan1.docx",
+  suratKeteranganRiwayatTanahRev62: {
+    label: "SuratKeteranganRiwayatTanah-Rev.6.2",
+    fields: [
+      "desa",
+      "kecamatan",
+      "kota",
+      "provinsi",
+      "penggunaan",
+      "nop",
+      "persil",
+      "klas",
+      "pemilikTanah",
+      "nama",
+      "alamat",
+      "lokasi",
+      "tanggalPembuatan",
+      "saksi1",
+      "saksi2",
+      "saksi3",
+      "saksi4",
+      "kades",
+      "nipKades",
+      "camat",
+      "nipCamat",
+    ],
+    templatePath: "/doc-lahan/SuratKeteranganRiwayatTanah-Rev.6.2.docx",
   },
-  suratQ: {
-    label: "1. Berita Acara Kesepakatan (BAK) - 20 Tahun-Rev.5.3",
-    fields: ["nama", "alamat", "desa", "nib"],
-    templatePath: "/SuratPernyataan1.docx",
+  suratKeteranganTanah: {
+    label: "SuratKeteranganTanah",
+    fields: [
+      "desa",
+      "kecamatan",
+      "kota",
+      "provinsi",
+      "penggunaan",
+      "nop",
+      "persil",
+      "klas",
+      "pemilikTanah",
+      "nama",
+      "alamat",
+      "lokasi",
+      "tanggalPembuatan",
+      "saksi1",
+      "saksi2",
+      "saksi3",
+      "saksi4",
+      "kades",
+      "nipKades",
+      "camat",
+      "nipCamat",
+    ],
+    templatePath: "/doc-lahan/SuratKeteranganTanah.docx",
   },
-  suratR: {
-    label: "BA Pengukuran Warga Radius Tower",
-    fields: ["nama", "alamat", "desa", "nib"],
-    templatePath: "/SuratPernyataan1.docx",
+  suratPernyataanPenguasaanFisikTanah: {
+    label: "SuratPernyataanPenguasaanFisikTanah",
+    fields: [
+      "namaPembuat",
+      "tempatLahir",
+      "ttl",
+      "noKtp",
+      "alamatPembuat",
+      "jalan",
+      "rt",
+      "rw",
+      "desa",
+      "kecamatan",
+      "kota",
+      "nib",
+      "luas",
+      "statusTanah",
+      "penggunaan",
+      "batasUtara",
+      "batasTimur",
+      "batasSelatan",
+      "batasBarat",
+      "tahunDok",
+      "proses",
+      "saksi1",
+      "alamatSaksi1",
+      "saksi2",
+      "alamatSaksi2",
+      "tanggalPembuatan",
+      "kades",
+      "nipKades",
+      "camat",
+      "nipCamat",
+      "tandaBatas",
+      "keadaanTanah",
+      "penunjukBatas",
+    ],
+    templatePath: "/doc-lahan/SuratPernyataanPenguasaanFisikTanah.docx",
   },
-  suratS: {
-    label: "19 Surat Persetujuan Lahan dan Jalan",
-    fields: ["nama", "alamat", "desa", "nib"],
-    templatePath: "/SuratPernyataan1.docx",
+  suratPernyataanTidakSengketadanDalamJaminanRev10: {
+    label: "SuratPernyataanTidakSengketadanDalamJaminan-Rev.1.0",
+    fields: [
+      "namaPembuat",
+      "noKtp",
+      "tempatLahir",
+      "ttl",
+      "alamatPembuat",
+      "pekerjaanPembuat",
+      "alamatTanah",
+      "luas",
+      "statusTanah",
+      "nomorTanah",
+      "batasUtara",
+      "batasTimur",
+      "batasSelatan",
+      "batasBarat",
+      "tglTtdPemilik",
+      "kades",
+      "nipKades",
+      "tglTtdKades",
+      "camat",
+      "nipCamat",
+      "tglTtdCamat",
+    ],
+    templatePath:
+      "/doc-lahan/SuratPernyataanTidakSengketadanDalamJaminan-Rev.1.0.docx",
   },
-  suratT: {
-    label: "5. Bukti Penerimaan Pemberitahuan Persetujuan Warga dalam Radius",
-    fields: ["nama", "alamat", "desa", "nib"],
-    templatePath: "/SuratPernyataan1.docx",
-  },
-  suratU: {
-    label:
-      "14. Layout Denah Lokasi Penempatan Menara Tower Telekomunikasi dalam Radius Tower",
-    fields: ["nama", "alamat", "desa", "nib"],
-    templatePath: "/SuratPernyataan1.docx",
+  suratPernyataanTidakSengketadanTidakDalamJaminanRev10NEWL1: {
+    label: "SuratPernyataanTidakSengketadanTidakDalamJaminan-Rev.1.0-NEW L1",
+    fields: [
+      "namaPembuat",
+      "noKtp",
+      "tempatLahir",
+      "ttl",
+      "alamatPembuat",
+      "pekerjaanPembuat",
+      "alamatTanah",
+      "luas",
+      "statusTanah",
+      "nomorTanah",
+      "batasUtara",
+      "batasTimur",
+      "batasSelatan",
+      "batasBarat",
+      "tglTtdPemilik",
+      "kades",
+      "nipKades",
+      "tglTtdKades",
+      "camat",
+      "nipCamat",
+      "tglTtdCamat",
+    ],
+    templatePath:
+      "/doc-lahan/SuratPernyataanTidakSengketadanTidakDalamJaminan-Rev.1.0-NEW L1.docx",
   },
 };
 
@@ -289,7 +517,11 @@ const FormulirCustom = () => {
     try {
       const configsToGenerate: SuratConfig[] = selectedSurat
         .map((surat) => {
-          const config = suratConfigs[surat as keyof typeof suratConfigs];
+          const config =
+            suratConfigs[
+              (surat as keyof typeof suratConfigs) ||
+                (surat as keyof typeof suratSitacs)
+            ];
           if (config) {
             const filteredData = config.fields.reduce((acc, field) => {
               acc[field] = data[field as keyof FormData];
@@ -317,7 +549,8 @@ const FormulirCustom = () => {
     new Set(
       selectedSurat.flatMap(
         (surat) =>
-          suratConfigs[surat as keyof typeof suratConfigs]?.fields || []
+          suratConfigs[surat as keyof typeof suratConfigs]?.fields ||
+          suratSitacs[surat as keyof typeof suratSitacs]?.fields
       )
     )
   );
@@ -325,7 +558,7 @@ const FormulirCustom = () => {
   return (
     <div className="px-8 py-6 items-center">
       <div className="justify-between grid grid-cols-2 gap-1 mb-4">
-        <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
+        {/* <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
             <h2 className="mb-2 text-lg font-bold text-md text-orange-400">
@@ -348,7 +581,7 @@ const FormulirCustom = () => {
               </label>
             ))}
           </div>
-        </div>
+        </div> */}
         <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
@@ -373,7 +606,7 @@ const FormulirCustom = () => {
             ))}
           </div>
         </div>
-        <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
+        {/* <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
             <h2 className="mb-2 text-lg font-bold text-md text-orange-400">
@@ -420,7 +653,7 @@ const FormulirCustom = () => {
               </label>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {selectedSurat.length > 0 && (
