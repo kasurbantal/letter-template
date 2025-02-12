@@ -270,7 +270,7 @@ const suratLahan = {
       "tanggalPertemuan",
     ],
     templatePath:
-      "/public/doc-lahan/SuketBPN-SuratPernyataanTanahBelumBersertipikat-StandardTBIG.docx",
+      "/doc-lahan/SuketBPN-SuratPernyataanTanahBelumBersertipikat-StandardTBIG.docx",
   },
   suratKeteranganBebasBanjir: {
     label: "Surat Keterangan Bebas Banjir",
