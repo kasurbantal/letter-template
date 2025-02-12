@@ -726,7 +726,7 @@ const FormulirCustom = () => {
   );
 
   const displayedFieldsWithLabels = displayedFields.map(
-    (field) => fieldLabels[field] || field
+    (fields) => fieldLabels[fields] || fields
   );
 
   return (

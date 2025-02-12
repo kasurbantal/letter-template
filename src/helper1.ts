@@ -12,13 +12,13 @@ export const generateMultipleDocx = async (
   suratConfigs: SuratConfig[],
   pemilikLahan: SuratConfig[],
   draftPks: SuratConfig[],
-  suratSitacs: SuratConfig[]
+  suratLahan: SuratConfig[]
 ) => {
   const allConfigs = [
     ...suratConfigs,
     ...pemilikLahan,
     ...draftPks,
-    ...suratSitacs,
+    ...suratLahan,
   ];
   for (const { field, templatePath, fileNamePrefix } of allConfigs) {
     try {
