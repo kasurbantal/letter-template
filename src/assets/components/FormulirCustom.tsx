@@ -59,6 +59,8 @@ interface FormData {
   namaPemilik: string;
   alamatPemilik: string;
   noKTPPemilik: string;
+  pemegangHak: string;
+  alamatPemegangHak: string;
   noBAK: string;
   namaRt: string;
   namaRw: string;
@@ -135,6 +137,8 @@ const defaultValues: FormData = {
   namaPemilik: "",
   alamatPemilik: "",
   noKTPPemilik: "",
+  pemegangHak: "",
+  alamatPemegangHak: "",
   noBAK: "",
   namaRt: "",
   namaRw: "",
@@ -147,6 +151,97 @@ const defaultValues: FormData = {
   tanggalPertemuan: new Date(),
   namaPejabatBPN: "",
   jabatanPejabatBPN: "",
+};
+
+const fieldLabels: Record<string, string> = {
+  nama: "Nama",
+  noKtp: "Nomor KTP",
+  ttl: "Tempat, Tanggal Lahir",
+  nama2: "Nama Kedua",
+  noKtp2: "Nomor KTP Kedua",
+  ttl2: "Tempat, Tanggal Lahir Kedua",
+  ahliWaris: "Ahli Waris",
+  tanggalAkta: "Tanggal Akta",
+  number: "Nomor Akta",
+  penerbit: "Penerbit",
+  buktiKepemilikan: "Bukti Kepemilikan",
+  alamat: "Alamat",
+  desa: "Desa",
+  rt: "RT",
+  rw: "RW",
+  kecamatan: "Kecamatan",
+  kabupaten: "Kabupaten",
+  provinsi: "Provinsi",
+  namaKuasa: "Nama Kuasa",
+  ttlKuasa: "Tempat, Tanggal Lahir Kuasa",
+  noKtpKuasa: "Nomor KTP Kuasa",
+  alamatKuasa: "Alamat Kuasa",
+  namaPerusahaan: "Nama Perusahaan",
+  lokasi: "Lokasi",
+  pemberiKuasa: "Pemberi Kuasa",
+  penerimaKuasa: "Penerima Kuasa",
+  namaPembuat: "Nama Pembuat",
+  tempatLahirPembuat: "Tempat Lahir Pembuat",
+  ttlPembuat: "Tempat, Tanggal Lahir Pembuat",
+  noKtpPembuat: "Nomor KTP Pembuat",
+  alamatPembuat: "Alamat Pembuat",
+  jalan: "Jalan",
+  kota: "Kota",
+  nib: "NIB",
+  luas: "Luas Tanah",
+  statusTanah: "Status Tanah",
+  penggunaan: "Penggunaan Tanah",
+  batasUtara: "Batas Utara",
+  batasTimur: "Batas Timur",
+  batasSelatan: "Batas Selatan",
+  batasBarat: "Batas Barat",
+  tahunDok: "Tahun Dokumen",
+  proses: "Proses",
+  saksi1: "Saksi 1",
+  alamatSaksi1: "Alamat Saksi 1",
+  saksi2: "Saksi 2",
+  alamatSaksi2: "Alamat Saksi 2",
+  saksi3: "Saksi 3",
+  saksi4: "Saksi 4",
+  tanggalPembuatan: "Tanggal Pembuatan",
+  kades: "Kepala Desa",
+  nipKades: "NIP Kepala Desa",
+  camat: "Camat",
+  nipCamat: "NIP Camat",
+  tandaBatas: "Tanda Batas",
+  keadaanTanah: "Keadaan Tanah",
+  penunjukBatas: "Penunjuk Batas",
+  nop: "NOP",
+  persil: "Persil",
+  klas: "Klasifikasi Tanah",
+  pemilikTanah: "Pemilik Tanah",
+  panjangTanah: "Panjang Tanah",
+  lebarTanah: "Lebar Tanah",
+  dusun: "Dusun",
+  alamatTanah: "Alamat Tanah",
+  namaPejabat: "Nama Pejabat",
+  jabatan: "Jabatan",
+  ptSatu: "Perusahaan 1",
+  ptDua: "Perusahaan 2",
+  nomorDok: "Nomor Dokumen",
+  tglDok: "Tanggal Dokumen",
+  nameSite: "Nama Site",
+  siteId: "ID Site",
+  namaPemilik: "Nama Pemilik",
+  alamatPemilik: "Alamat Pemilik",
+  noKTPPemilik: "Nomor KTP Pemilik",
+  noBAK: "Nomor BAK",
+  namaRt: "Nama Ketua RT",
+  namaRw: "Nama Ketua RW",
+  pekerjaanPembuat: "Pekerjaan Pembuat",
+  nomorTanah: "Nomor Tanah",
+  tglTtdPemilik: "Tanggal Tanda Tangan Pemilik",
+  tglTtdKades: "Tanggal Tanda Tangan Kepala Desa",
+  tglTtdCamat: "Tanggal Tanda Tangan Camat",
+  hariPertemuan: "Hari Pertemuan",
+  tanggalPertemuan: "Tanggal Pertemuan",
+  namaPejabatBPN: "Nama Pejabat BPN",
+  jabatanPejabatBPN: "Jabatan Pejabat BPN",
 };
 
 const suratLahan = {
@@ -271,8 +366,8 @@ const suratLahan = {
       "luas",
       "pemilikTanah",
       "dusun",
-      "nama",
-      "alamat",
+      "pemegangHak",
+      "alamatPemegangHak",
       "tanggalPembuatan",
       "saksi1",
       "saksi2",
@@ -630,6 +725,10 @@ const FormulirCustom = () => {
     )
   );
 
+  const displayedFieldsWithLabels = displayedFields.map(
+    (field) => fieldLabels[field] || field
+  );
+
   return (
     <div className="md:px-8 md:py-6 items-center sm:px-6 sm:py-4">
       <div className="justify-between grid sm:grid-cols-1 md:grid-cols-2 gap-1 mb-4">
@@ -735,7 +834,7 @@ const FormulirCustom = () => {
         <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200 mt-2 ">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
             <div className="grid md:grid-cols-4 gap-4 sm:grid-cols-2">
-              {displayedFields.map((field) => (
+              {displayedFieldsWithLabels.map((field) => (
                 <div key={field} className="w-full">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {field.charAt(0).toUpperCase() + field.slice(1)}:
