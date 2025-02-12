@@ -8,8 +8,19 @@ interface SuratConfig {
   fileNamePrefix: string;
 }
 
-export const generateMultipleDocx = async (suratConfigs: SuratConfig[]) => {
-  for (const { field, templatePath, fileNamePrefix } of suratConfigs) {
+export const generateMultipleDocx = async (
+  suratConfigs: SuratConfig[],
+  pemilikLahan: SuratConfig[],
+  draftPks: SuratConfig[],
+  suratSitacs: SuratConfig[]
+) => {
+  const allConfigs = [
+    ...suratConfigs,
+    ...pemilikLahan,
+    ...draftPks,
+    ...suratSitacs,
+  ];
+  for (const { field, templatePath, fileNamePrefix } of allConfigs) {
     try {
       const response = await fetch(templatePath);
       if (!response.ok) {

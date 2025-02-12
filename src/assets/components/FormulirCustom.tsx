@@ -177,7 +177,7 @@ const suratSitacs = {
       "tanggalPertemuan",
     ],
     templatePath:
-      "/doc-lahan/SuketBPN-SuratPernyataanTanahBelumBersertipikat-StandardTBIG.docx",
+      "/public/doc-lahan/SuketBPN-SuratPernyataanTanahBelumBersertipikat-StandardTBIG.docx",
   },
   suratKeteranganBebasBanjir: {
     label: "SuratKeteranganBebasBanjir",
@@ -431,7 +431,8 @@ const pemilikLahan = {
       "pemberiKuasa",
       "penerimaKuasa",
     ],
-    templatePath: "/public/Dok Pemilik Lahan/waris/SuperRekeningAktif.docx",
+    templatePath:
+      "/public/Dok Pemilik Lahan/waris/SuratPersetujuandanKuasaAhliWaris.docx",
   },
   suratW: {
     label: "Super Rekening Aktif",
@@ -517,11 +518,7 @@ const FormulirCustom = () => {
     try {
       const configsToGenerate: SuratConfig[] = selectedSurat
         .map((surat) => {
-          const config =
-            suratConfigs[
-              (surat as keyof typeof suratConfigs) ||
-                (surat as keyof typeof suratSitacs)
-            ];
+          const config = suratConfigs[surat as keyof typeof suratConfigs];
           if (config) {
             const filteredData = config.fields.reduce((acc, field) => {
               acc[field] = data[field as keyof FormData];
@@ -538,7 +535,71 @@ const FormulirCustom = () => {
         })
         .filter((item): item is SuratConfig => item !== null);
 
-      await generateMultipleDocx(configsToGenerate);
+      const configsToGenerate2: SuratConfig[] = selectedSurat
+        .map((surat) => {
+          const config = pemilikLahan[surat as keyof typeof pemilikLahan];
+          if (config) {
+            const filteredData = config.fields.reduce((acc, field) => {
+              acc[field] = data[field as keyof FormData];
+              return acc;
+            }, {} as Record<string, unknown>);
+
+            return {
+              field: filteredData,
+              templatePath: config.templatePath,
+              fileNamePrefix: config.label,
+            };
+          }
+          return null;
+        })
+        .filter((item): item is SuratConfig => item !== null);
+      console.log(configsToGenerate2);
+
+      const configsToGenerate3: SuratConfig[] = selectedSurat
+        .map((surat) => {
+          const config = suratSitacs[surat as keyof typeof suratSitacs];
+          if (config) {
+            const filteredData = config.fields.reduce((acc, field) => {
+              acc[field] = data[field as keyof FormData];
+              return acc;
+            }, {} as Record<string, unknown>);
+
+            return {
+              field: filteredData,
+              templatePath: config.templatePath,
+              fileNamePrefix: config.label,
+            };
+          }
+          return null;
+        })
+        .filter((item): item is SuratConfig => item !== null);
+      console.log(configsToGenerate3);
+
+      const configsToGenerate4: SuratConfig[] = selectedSurat
+        .map((surat) => {
+          const config = draftPks[surat as keyof typeof draftPks];
+          if (config) {
+            const filteredData = config.fields.reduce((acc, field) => {
+              acc[field] = data[field as keyof FormData];
+              return acc;
+            }, {} as Record<string, unknown>);
+
+            return {
+              field: filteredData,
+              templatePath: config.templatePath,
+              fileNamePrefix: config.label,
+            };
+          }
+          return null;
+        })
+        .filter((item): item is SuratConfig => item !== null);
+
+      await generateMultipleDocx(
+        configsToGenerate,
+        configsToGenerate2,
+        configsToGenerate3,
+        configsToGenerate4
+      );
       alert("Surat berhasil di-generate!");
     } catch (error) {
       console.error("Error:", error);
@@ -550,15 +611,17 @@ const FormulirCustom = () => {
       selectedSurat.flatMap(
         (surat) =>
           suratConfigs[surat as keyof typeof suratConfigs]?.fields ||
-          suratSitacs[surat as keyof typeof suratSitacs]?.fields
+          suratSitacs[surat as keyof typeof suratSitacs]?.fields ||
+          pemilikLahan[surat as keyof typeof pemilikLahan]?.fields ||
+          draftPks[surat as keyof typeof draftPks]?.fields
       )
     )
   );
 
   return (
-    <div className="px-8 py-6 items-center">
-      <div className="justify-between grid grid-cols-2 gap-1 mb-4">
-        {/* <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
+    <div className="md:px-8 md:py-6 items-center sm:px-6 sm:py-4">
+      <div className="justify-between grid sm:grid-cols-1 md:grid-cols-2 gap-1 mb-4">
+        <div className="md:px-4 md:py-4 sm:px-2 sm:py-2 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
             <h2 className="mb-2 text-lg font-bold text-md text-orange-400">
@@ -581,7 +644,7 @@ const FormulirCustom = () => {
               </label>
             ))}
           </div>
-        </div> */}
+        </div>
         <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
@@ -606,7 +669,7 @@ const FormulirCustom = () => {
             ))}
           </div>
         </div>
-        {/* <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
+        <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
             <h2 className="mb-2 text-lg font-bold text-md text-orange-400">
@@ -653,13 +716,13 @@ const FormulirCustom = () => {
               </label>
             ))}
           </div>
-        </div> */}
+        </div>
       </div>
 
       {selectedSurat.length > 0 && (
         <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200 mt-2 ">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-4 gap-4 sm:grid-cols-2">
               {displayedFields.map((field) => (
                 <div key={field} className="w-full">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -672,7 +735,7 @@ const FormulirCustom = () => {
                         field.charAt(0).toUpperCase() + field.slice(1)
                       } harus diisi`,
                     })}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
+                    className="w-full text-black px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 border-gray-300"
                   />
                   {errors[field as keyof FormData] && (
                     <p className="text-sm text-red-500 mt-1">
@@ -685,8 +748,9 @@ const FormulirCustom = () => {
           </form>
           <div className="flex justify-end mt-4">
             <button
+              onClick={handleSubmit(onSubmit)}
               type="submit"
-              className="text-white bg-orange-500 py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="text-white bg-orange-500 py-2 px-4 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
             >
               Generate Docx
             </button>
