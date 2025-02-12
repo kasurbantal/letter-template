@@ -51,8 +51,7 @@ interface FormData {
   lokasi: string;
   namaPejabat: string;
   jabatan: string;
-  ptSatu: string;
-  ptDua: string;
+  kontraktor: string;
   nomorDok: string;
   tglDok: Date;
   nameSite: string;
@@ -69,7 +68,7 @@ interface FormData {
   tglTtdKades: Date;
   tglTtdCamat: Date;
   hariPertemuan: string;
-  tanggalPertemuan: string;
+  tanggalPertemuan: Date;
   namaPejabatBPN: string;
   jabatanPejabatBPN: string;
 }
@@ -128,8 +127,7 @@ const defaultValues: FormData = {
   lokasi: "",
   namaPejabat: "",
   jabatan: "",
-  ptSatu: "",
-  ptDua: "",
+  kontraktor: "",
   nomorDok: "",
   tglDok: new Date(),
   nameSite: "",
@@ -146,20 +144,20 @@ const defaultValues: FormData = {
   tglTtdKades: new Date(),
   tglTtdCamat: new Date(),
   hariPertemuan: "",
-  tanggalPertemuan: "",
+  tanggalPertemuan: new Date(),
   namaPejabatBPN: "",
   jabatanPejabatBPN: "",
 };
 
-const suratSitacs = {
+const suratLahan = {
   suketBPNSuratPernyataanTanahBelumBersertipikatStandardTBIG: {
-    label: "SuketBPN-SuratPernyataanTanahBelumBersertipikat-StandardTBIG",
+    label:
+      "Surat Keterangan BPN - Surat Pernyataan TanahBelum Bersertipikat - Standard TBIG",
     fields: [
       "tanggalPembuatan",
       "namaPejabat",
       "jabatan",
-      "ptSatu",
-      "ptDua",
+      "kontraktor",
       "nomorDok",
       "tglDok",
       "nameSite",
@@ -180,7 +178,7 @@ const suratSitacs = {
       "/public/doc-lahan/SuketBPN-SuratPernyataanTanahBelumBersertipikat-StandardTBIG.docx",
   },
   suratKeteranganBebasBanjir: {
-    label: "SuratKeteranganBebasBanjir",
+    label: "Surat Keterangan Bebas Banjir",
     fields: [
       "namaPemilik",
       "alamatPemilik",
@@ -193,7 +191,7 @@ const suratSitacs = {
     templatePath: "/doc-lahan/SuratKeteranganBebasBanjir.docx",
   },
   suratKeteranganKepemilikanTanah: {
-    label: "SuratKeteranganKepemilikanTanah",
+    label: "Surat Keterangan Kepemilikan Tanah",
     fields: [
       "desa",
       "kecamatan",
@@ -206,6 +204,7 @@ const suratSitacs = {
       "pemilikTanah",
       "panjangTanah",
       "lebarTanah",
+      "luas",
       "namaPembuat",
       "dusun",
       "batasUtara",
@@ -226,7 +225,7 @@ const suratSitacs = {
     templatePath: "/doc-lahan/SuratKeteranganKepemilikanTanah.docx",
   },
   suratKeteranganRiwayatTanahRev62: {
-    label: "SuratKeteranganRiwayatTanah-Rev.6.2",
+    label: "Surat Keterangan Riwayat Tanah -Rev.6.2",
     fields: [
       "desa",
       "kecamatan",
@@ -249,11 +248,15 @@ const suratSitacs = {
       "nipKades",
       "camat",
       "nipCamat",
+      "batasUtara",
+      "batasTimur",
+      "batasSelatan",
+      "batasBarat",
     ],
     templatePath: "/doc-lahan/SuratKeteranganRiwayatTanah-Rev.6.2.docx",
   },
   suratKeteranganTanah: {
-    label: "SuratKeteranganTanah",
+    label: "Surat Keterangan Tanah",
     fields: [
       "desa",
       "kecamatan",
@@ -263,10 +266,13 @@ const suratSitacs = {
       "nop",
       "persil",
       "klas",
+      "panjangTanah",
+      "lebarTanah",
+      "luas",
       "pemilikTanah",
+      "dusun",
       "nama",
       "alamat",
-      "lokasi",
       "tanggalPembuatan",
       "saksi1",
       "saksi2",
@@ -276,11 +282,15 @@ const suratSitacs = {
       "nipKades",
       "camat",
       "nipCamat",
+      "batasUtara",
+      "batasTimur",
+      "batasSelatan",
+      "batasBarat",
     ],
     templatePath: "/doc-lahan/SuratKeteranganTanah.docx",
   },
   suratPernyataanPenguasaanFisikTanah: {
-    label: "SuratPernyataanPenguasaanFisikTanah",
+    label: "Surat Pernyataan Penguasaan Fisik Tanah",
     fields: [
       "namaPembuat",
       "tempatLahir",
@@ -319,7 +329,7 @@ const suratSitacs = {
     templatePath: "/doc-lahan/SuratPernyataanPenguasaanFisikTanah.docx",
   },
   suratPernyataanTidakSengketadanDalamJaminanRev10: {
-    label: "SuratPernyataanTidakSengketadanDalamJaminan-Rev.1.0",
+    label: "Surat Pernyataan Tidak Sengketa dan Dalam Jaminan - Rev.1.0",
     fields: [
       "namaPembuat",
       "noKtp",
@@ -335,6 +345,7 @@ const suratSitacs = {
       "batasTimur",
       "batasSelatan",
       "batasBarat",
+      "pemilikTanah",
       "tglTtdPemilik",
       "kades",
       "nipKades",
@@ -347,7 +358,8 @@ const suratSitacs = {
       "/doc-lahan/SuratPernyataanTidakSengketadanDalamJaminan-Rev.1.0.docx",
   },
   suratPernyataanTidakSengketadanTidakDalamJaminanRev10NEWL1: {
-    label: "SuratPernyataanTidakSengketadanTidakDalamJaminan-Rev.1.0-NEW L1",
+    label:
+      "Surat Pernyataan Tidak Sengketa dan Tidak Dalam Jaminan - Rev.1.0-NEW L1",
     fields: [
       "namaPembuat",
       "noKtp",
@@ -557,7 +569,7 @@ const FormulirCustom = () => {
 
       const configsToGenerate3: SuratConfig[] = selectedSurat
         .map((surat) => {
-          const config = suratSitacs[surat as keyof typeof suratSitacs];
+          const config = suratLahan[surat as keyof typeof suratLahan];
           if (config) {
             const filteredData = config.fields.reduce((acc, field) => {
               acc[field] = data[field as keyof FormData];
@@ -611,7 +623,7 @@ const FormulirCustom = () => {
       selectedSurat.flatMap(
         (surat) =>
           suratConfigs[surat as keyof typeof suratConfigs]?.fields ||
-          suratSitacs[surat as keyof typeof suratSitacs]?.fields ||
+          suratLahan[surat as keyof typeof suratLahan]?.fields ||
           pemilikLahan[surat as keyof typeof pemilikLahan]?.fields ||
           draftPks[surat as keyof typeof draftPks]?.fields
       )
@@ -621,7 +633,7 @@ const FormulirCustom = () => {
   return (
     <div className="md:px-8 md:py-6 items-center sm:px-6 sm:py-4">
       <div className="justify-between grid sm:grid-cols-1 md:grid-cols-2 gap-1 mb-4">
-        <div className="md:px-4 md:py-4 sm:px-2 sm:py-2 bg-white rounded-lg flex flex-col border-2 border-gray-200">
+        {/* <div className="md:px-4 md:py-4 sm:px-2 sm:py-2 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
             <h2 className="mb-2 text-lg font-bold text-md text-orange-400">
@@ -644,16 +656,16 @@ const FormulirCustom = () => {
               </label>
             ))}
           </div>
-        </div>
+        </div> */}
         <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
             <h2 className="mb-2 text-lg font-bold text-md text-orange-400">
-              Dok SITAC:
+              Dok Lahan:
             </h2>
           </div>
           <div className="space-x-4">
-            {Object.entries(suratSitacs).map(([key, config]) => (
+            {Object.entries(suratLahan).map(([key, config]) => (
               <label
                 key={key}
                 className="flex items-center text-black p-1 gap-2"
@@ -669,7 +681,7 @@ const FormulirCustom = () => {
             ))}
           </div>
         </div>
-        <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
+        {/* <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
             <h2 className="mb-2 text-lg font-bold text-md text-orange-400">
@@ -692,8 +704,8 @@ const FormulirCustom = () => {
               </label>
             ))}
           </div>
-        </div>
-        <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
+        </div> */}
+        {/* <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200">
           <div className="flex flex-direction-row">
             <MdOutlineAssignment size={24} className="text-orange-400 mr-2" />
             <h2 className="mb-2 text-lg font-bold text-md text-orange-400">
@@ -716,7 +728,7 @@ const FormulirCustom = () => {
               </label>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {selectedSurat.length > 0 && (
