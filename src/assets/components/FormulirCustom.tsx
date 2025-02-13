@@ -725,9 +725,9 @@ const FormulirCustom = () => {
     )
   );
 
-  const displayedFieldsWithLabels = displayedFields.map(
-    (fields) => fieldLabels[fields] || fields
-  );
+  // const displayedFieldsWithLabels = displayedFields.map(
+  //   (fields) => fieldLabels[fields] || fields
+  // );
 
   return (
     <div className="md:px-8 md:py-6 items-center sm:px-6 sm:py-4">
@@ -834,7 +834,7 @@ const FormulirCustom = () => {
         <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200 mt-2 ">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
             <div className="grid md:grid-cols-4 gap-4 sm:grid-cols-2">
-              {displayedFieldsWithLabels.map((field) => (
+              {displayedFields.map((field) => (
                 <div key={field} className="w-full">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {field.charAt(0).toUpperCase() + field.slice(1)}:
