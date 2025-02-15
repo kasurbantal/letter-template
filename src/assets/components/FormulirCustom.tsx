@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { generateMultipleDocx } from "../../helper1";
 import { MdOutlineAssignment } from "react-icons/md";
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 interface FormData {
   namaPembuat: string;
@@ -612,6 +616,7 @@ const FormulirCustom = () => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<FormData>({ defaultValues });
   const [selectedSurat, setSelectedSurat] = useState<string[]>([]);
 
@@ -725,6 +730,18 @@ const FormulirCustom = () => {
     )
   );
 
+  const isDateField = (field: string) => {
+    const dateFields = [
+      "ttlPembuat",
+      "tanggalPembuatan",
+      "tanggalLahir",
+      "tglSurat",
+      "tanggalPertemuan",
+      "tglDok",
+    ];
+    return dateFields.includes(field);
+  };
+
   return (
     <div className="md:px-8 md:py-6 items-center sm:px-6 sm:py-4">
       <div className="justify-between grid sm:grid-cols-1 md:grid-cols-2 gap-1 mb-4">
@@ -827,23 +844,54 @@ const FormulirCustom = () => {
       </div>
 
       {selectedSurat.length > 0 && (
-        <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200 mt-2 ">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 ">
+        <div className="px-4 py-4 bg-white rounded-lg flex flex-col border-2 border-gray-200 mt-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid md:grid-cols-4 gap-4 sm:grid-cols-2">
               {displayedFields.map((field) => (
                 <div key={field} className="w-full">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {fieldLabels[field] || field}
-                  </label>
-                  <input
-                    type="text"
-                    {...register(field as keyof FormData, {
-                      required: `${
-                        field.charAt(0).toUpperCase() + field.slice(1)
-                      } harus diisi`,
-                    })}
-                    className="w-full text-black px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 border-gray-300"
-                  />
+                  {isDateField(field) ? (
+                    <Controller
+                      name={field as keyof FormData}
+                      control={control}
+                      defaultValue={""}
+                      render={({ field: { onChange, value } }) => (
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DateTimePicker
+                            label={fieldLabels[field] || field}
+                            value={dayjs(value)}
+                            onChange={(date) =>
+                              onChange(dayjs(date).format("DD-MM-YYYY"))
+                            }
+                            format="DD/MM/YYYY"
+                            viewRenderers={{
+                              hours: null,
+                              minutes: null,
+                              seconds: null,
+                            }}
+                            formatDensity="spacious"
+                            slotProps={{
+                              textField: {
+                                variant: "outlined",
+                                color: "warning",
+                                size: "small",
+                              },
+                            }}
+                            className="w-full text-black px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 border-gray-300 "
+                          />
+                        </LocalizationProvider>
+                      )}
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      {...register(field as keyof FormData, {
+                        required: `${
+                          field.charAt(0).toUpperCase() + field.slice(1)
+                        } harus diisi`,
+                      })}
+                      className="w-full text-black px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 border-gray-300"
+                    />
+                  )}
                   {errors[field as keyof FormData] && (
                     <p className="text-sm text-red-500 mt-1">
                       {errors[field as keyof FormData]?.message}
