@@ -3,7 +3,7 @@ import Docxtemplater from "docxtemplater";
 import { saveAs } from "file-saver";
 
 interface SuratConfig {
-  field: Record<string, any>;
+  field: Record<string, unknown>;
   templatePath: string;
   fileNamePrefix: string;
 }

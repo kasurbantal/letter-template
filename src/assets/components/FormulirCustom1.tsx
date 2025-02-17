@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { generateDocx } from "../../helper";
+import { generateDocx } from "../../helper/helper";
 
 interface FormData {
   nama: string;
