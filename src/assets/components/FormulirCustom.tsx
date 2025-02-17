@@ -849,6 +849,12 @@ const FormulirCustom = () => {
             <div className="grid md:grid-cols-4 gap-4 sm:grid-cols-2">
               {displayedFields.map((field) => (
                 <div key={field} className="w-full">
+                  <label
+                    htmlFor={field}
+                    className="block text-sm font-medium text-black pb-2"
+                  >
+                    {fieldLabels[field] || field}
+                  </label>
                   {isDateField(field) ? (
                     <Controller
                       name={field as keyof FormData}
@@ -857,7 +863,6 @@ const FormulirCustom = () => {
                       render={({ field: { onChange, value } }) => (
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DateTimePicker
-                            label={fieldLabels[field] || field}
                             value={dayjs(value)}
                             onChange={(date) =>
                               onChange(dayjs(date).format("DD-MM-YYYY"))
@@ -885,9 +890,7 @@ const FormulirCustom = () => {
                     <input
                       type="text"
                       {...register(field as keyof FormData, {
-                        required: `${
-                          field.charAt(0).toUpperCase() + field.slice(1)
-                        } harus diisi`,
+                        required: `${fieldLabels[field] || field} harus diisi`,
                       })}
                       className="w-full text-black px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 border-gray-300"
                     />
