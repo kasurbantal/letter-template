@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { generateMultipleDocx } from "../../helper1";
+import { generateMultipleDocx } from "../../helper";
 import { MdOutlineAssignment } from "react-icons/md";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -160,10 +160,10 @@ const defaultValues: FormData = {
 const fieldLabels: Record<string, string> = {
   nama: "Nama",
   noKtp: "Nomor KTP",
-  ttl: "Tempat, Tanggal Lahir",
+  ttl: "Tanggal Lahir",
   nama2: "Nama Kedua",
   noKtp2: "Nomor KTP Kedua",
-  ttl2: "Tempat, Tanggal Lahir Kedua",
+  ttl2: "Tanggal Lahir Kedua",
   ahliWaris: "Ahli Waris",
   tanggalAkta: "Tanggal Akta",
   number: "Nomor Akta",
@@ -186,7 +186,7 @@ const fieldLabels: Record<string, string> = {
   penerimaKuasa: "Penerima Kuasa",
   namaPembuat: "Nama Pembuat",
   tempatLahirPembuat: "Tempat Lahir Pembuat",
-  ttlPembuat: "Tempat, Tanggal Lahir Pembuat",
+  ttlPembuat: "Tanggal Lahir Pembuat",
   noKtpPembuat: "Nomor KTP Pembuat",
   alamatPembuat: "Alamat Pembuat",
   jalan: "Jalan",
@@ -246,6 +246,9 @@ const fieldLabels: Record<string, string> = {
   tanggalPertemuan: "Tanggal Pertemuan",
   namaPejabatBPN: "Nama Pejabat BPN",
   jabatanPejabatBPN: "Jabatan Pejabat BPN",
+  pemegangHak: "Pemegang Hak",
+  alamatPemegangHak: "Alamat Pemegang Hak",
+  tempatLahir: "Tempat Lahir",
 };
 
 const suratLahan = {
@@ -335,7 +338,7 @@ const suratLahan = {
       "persil",
       "klas",
       "pemilikTanah",
-      "nama",
+      "luas",
       "alamat",
       "lokasi",
       "tanggalPembuatan",
@@ -392,8 +395,8 @@ const suratLahan = {
     label: "Surat Pernyataan Penguasaan Fisik Tanah",
     fields: [
       "namaPembuat",
-      "tempatLahir",
-      "ttl",
+      "tempatLahirPembuat",
+      "ttlPembuat",
       "noKtp",
       "alamatPembuat",
       "jalan",
@@ -432,8 +435,8 @@ const suratLahan = {
     fields: [
       "namaPembuat",
       "noKtp",
-      "tempatLahir",
-      "ttl",
+      "tempatLahirPembuat",
+      "ttlPembuat",
       "alamatPembuat",
       "pekerjaanPembuat",
       "alamatTanah",
@@ -462,8 +465,8 @@ const suratLahan = {
     fields: [
       "namaPembuat",
       "noKtp",
-      "tempatLahir",
-      "ttl",
+      "tempatLahirPembuat",
+      "ttlPembuat",
       "alamatPembuat",
       "pekerjaanPembuat",
       "alamatTanah",
@@ -738,6 +741,9 @@ const FormulirCustom = () => {
       "tglSurat",
       "tanggalPertemuan",
       "tglDok",
+      "tglTtdPemilik",
+      "tglTtdKades",
+      "tglTtdCamat",
     ];
     return dateFields.includes(field);
   };
