@@ -1,12 +1,7 @@
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { saveAs } from "file-saver";
-
-interface SuratConfig {
-  field: Record<string, any>;
-  templatePath: string;
-  fileNamePrefix: string;
-}
+import SuratConfig from "./SuratConfig";
 
 export const generateMultipleDocx = async (
   suratConfigs: SuratConfig[],

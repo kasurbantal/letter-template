@@ -6,84 +6,8 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-
-interface FormData {
-  namaPembuat: string;
-  tempatLahirPembuat: string;
-  ttlPembuat: Date;
-  noKtpPembuat: string;
-  alamatPembuat: string;
-  jalan: string;
-  rt: string;
-  rw: string;
-  desa: string;
-  kecamatan: string;
-  kota: string;
-  provinsi: string;
-  nib: string;
-  luas: number | string;
-  statusTanah: string;
-  penggunaan: string;
-  batasUtara: string;
-  batasTimur: string;
-  batasSelatan: string;
-  batasBarat: string;
-  tahunDok: number;
-  proses: string;
-  saksi1: string;
-  alamatSaksi1: string;
-  saksi2: string;
-  alamatSaksi2: string;
-  saksi3: string;
-  saksi4: string;
-  tanggalPembuatan: Date;
-  kades: string;
-  nipKades: string;
-  camat: string;
-  nipCamat: string;
-  tandaBatas: string;
-  keadaanTanah: string;
-  penunjukBatas: string;
-  nop: string;
-  persil: string;
-  klas: string;
-  pemilikTanah: string;
-  panjangTanah: number;
-  lebarTanah: number;
-  dusun: string;
-  alamatTanah: string;
-  lokasi: string;
-  namaPejabat: string;
-  jabatan: string;
-  kontraktor: string;
-  nomorDok: string;
-  tglDok: Date;
-  nameSite: string;
-  siteId: string;
-  namaPemilik: string;
-  alamatPemilik: string;
-  noKTPPemilik: string;
-  pemegangHak: string;
-  alamatPemegangHak: string;
-  noBAK: string;
-  namaRt: string;
-  namaRw: string;
-  pekerjaanPembuat: string;
-  nomorTanah: string;
-  tglTtdPemilik: Date;
-  tglTtdKades: Date;
-  tglTtdCamat: Date;
-  hariPertemuan: string;
-  tanggalPertemuan: Date;
-  namaPejabatBPN: string;
-  jabatanPejabatBPN: string;
-}
-
-interface SuratConfig {
-  field: Record<string, unknown>;
-  templatePath: string;
-  fileNamePrefix: string;
-}
+import FormData from "../../FormData";
+import SuratConfig from "../../SuratConfig";
 
 const defaultValues: FormData = {
   namaPembuat: "",
