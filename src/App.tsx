@@ -1,10 +1,10 @@
 import "./App.css";
-import SuratPernyataan from "./page/SuratPernyataan";
+import Letter from "./page/Letter";
 
 function App() {
   return (
     <>
-      <SuratPernyataan />
+      <Letter />
     </>
   );
 }

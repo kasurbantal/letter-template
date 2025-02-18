@@ -1,24 +1,40 @@
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { saveAs } from "file-saver";
+import SuratConfig from "./SuratConfig";
 
-export const generateDocx = async (
-  field: Record<string, any>,
-  template: string,
-  outputFileName: string = "Surat-Pernyataan.docx"
+export const generateMultipleDocx = async (
+  suratConfigs: SuratConfig[],
+  pemilikLahan: SuratConfig[],
+  draftPks: SuratConfig[],
+  suratLahan: SuratConfig[]
 ) => {
-  try {
-    const response = await fetch(template);
-    const arrayBuffer = await response.arrayBuffer();
+  const allConfigs = [
+    ...suratConfigs,
+    ...pemilikLahan,
+    ...draftPks,
+    ...suratLahan,
+  ];
+  for (const { field, templatePath, fileNamePrefix } of allConfigs) {
+    try {
+      const response = await fetch(templatePath);
+      if (!response.ok) {
+        throw new Error(`Failed to load template at ${templatePath}`);
+      }
 
-    const zip = new PizZip(arrayBuffer);
-    const doc = new Docxtemplater(zip);
-    doc.render(field);
-    const output = doc.getZip().generate({ type: "blob" });
+      const arrayBuffer = await response.arrayBuffer();
+      const zip = new PizZip(arrayBuffer);
+      const doc = new Docxtemplater(zip);
 
-    saveAs(output, outputFileName);
-  } catch (error) {
-    console.error("Error generating document:", error);
-    throw error;
+      doc.render(field);
+      const output = doc.getZip().generate({ type: "blob" });
+
+      const currentDate = new Date().toISOString().split("T")[0];
+      const outputFileName = `${fileNamePrefix}-${currentDate}.docx`;
+
+      saveAs(output, outputFileName);
+    } catch (error) {
+      console.error(`Error generating document "${fileNamePrefix}":`, error);
+    }
   }
 };
